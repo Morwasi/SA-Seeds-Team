@@ -1,0 +1,73 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    text-align: center;
+    padding: 20px;
+    background: #007BFF; /* Bootstrap blue */
+    color: white;
+}
+
+h1 {
+    font-size: 2.5em;
+    margin: 0;
+}
+
+main {
+    padding: 20px;
+}
+
+/* Section Styles */
+section {
+    margin: 20px 0;
+}
+
+article {
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 10px;
+    flex: 1;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Flex Container for Articles */
+section {
+    display: flex;
+    flex-wrap: wrap; /* Allows wrapping of articles */
+    justify-content: space-around; /* Space between articles */
+}
+
+/* Flex Item Styles */
+article h3 {
+    color: #007BFF; /* Heading color */
+}
+
+/* Footer Styles */
+footer {
+    background-color: #343a40; /* Dark background for footer */
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: relative; /* Allows footer to have a better layout */
+    bottom: 0;
+    width: 100%;
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+    section {
+        flex-direction: column; /* Stack articles vertically on small screens */
+    }
+
+    article {
+        margin: 10px 0; /* Margin for articles on small screens */
+        width: auto; /* Allow width to be auto to fit */
+    }
+}
