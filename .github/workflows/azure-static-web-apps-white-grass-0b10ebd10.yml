@@ -32,4 +32,5 @@ jobs:
         azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_WHITE_GRASS_0B10EBD10 }}
         action: "upload"
         app_location: "/"  # The path to your app (relative to repository root, modify if needed)
-        output_location: "build"  # Adjust based on where your built files are outputted
+        output_location: "src"  # Change this to your source directory if you don't need a separate build.
+

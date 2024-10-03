@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="login&signup.css">
+    <title>Login | Mam_Hlase Software</title>
+    <style>
+        .greeting-header {
+            text-align: center;
+            margin-bottom: 90px;
+            font-size: 36px;
+            color: #333;
+            font-weight: 800;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <div class="greeting-header">
+            <header id="greeting"></header>
+        </div>
+        <div class="login-header">
+            <header>Login</header>
+        </div>
+        <div class="input-box">
+            <input type="text" class="input-field" id="email" placeholder="Email" autocomplete="off" required>
+        </div>
+        <div class="input-box">
+            <input type="password" class="input-field" id="password" placeholder="Password" autocomplete="off" required>
+        </div>
+        <div class="forgot">
+            <section>
+                <input type="checkbox" id="check">
+                <label for="check">Remember me</label>
+            </section>
+            <section>
+                <a href="#">Forgot password</a>
+            </section>
+        </div>
+        <div class="input-submit">
+            <button class="submit-btn" id="submit">Sign In</button>
+        </div>
+        <div class="sign-up-link">
+            <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-analytics.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAGo_Dghioi_So3Kw9BDJ5S0Xi18f_-V4Y",
+            authDomain: "sa-seeds-team.firebaseapp.com",
+            projectId: "sa-seeds-team",
+            storageBucket: "sa-seeds-team.appspot.com",
+            messagingSenderId: "555618941591",
+            appId: "1:555618941591:web:bdf7dd7874410f74ce07d2",
+            measurementId: "G-ZYD59FW8R0"
+        };
+
+        // Initialize Firebase and Authentication
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth();
+
+        document.getElementById('submit').onclick = async function() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                if (user.emailVerified) {
+                    console.log("User logged in successfully!");
+                    window.location.href = "../home.html"; // Redirect to home.html
+                } else {
+                    alert("Please verify your email before logging in.");
+                    auth.signOut(); // Sign out if email is not verified
+                }
+            } catch (error) {
+                alert(error.message); // Show error message
+            }
+        };
+
+        function setGreeting() {
+            const greetingElement = document.getElementById('greeting');
+            const hours = new Date().getHours();
+
+            let greeting = "Welcome to Mam_Hlase Software";
+
+            if (hours < 12) {
+                greeting = "Good Morning, " + greeting;
+            } else if (hours < 18) {
+                greeting = "Good Afternoon, " + greeting;
+            } else {
+                greeting = "Good Evening, " + greeting;
+            }
+
+            greetingElement.textContent = greeting;
+        }
+
+        window.onload = setGreeting;
+    </script>
+
+</body>
+</html>

@@ -1,5 +1,12 @@
 {
   "dependencies": {
     "firebase": "^10.14.0"
+  },
+  "scripts": {
+    "build": "cp -r src/* dist/",
+    "start": "http-server dist"  
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
   }
 }

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="login&signup.css">
+    <title>Registration | Mam_Hlase Software</title>
+</head>
+<body>
+    <div class="login-box">
+        <div class="login-header">
+            <header>Register</header>
+        </div>
+        <div class="input-box">
+            <input type="text" id="first_name" class="input-field" placeholder="First Name" autocomplete="off" required>
+        </div>
+        <div class="input-box">
+            <input type="text" id="last_name" class="input-field" placeholder="Last Name" autocomplete="off" required>
+        </div>
+        <div class="input-box">
+            <input type="email" id="email" class="input-field" placeholder="Email" autocomplete="off" required>
+        </div>
+        <div class="input-box">
+            <input type="text" id="address" class="input-field" placeholder="Address (use Google Maps)" autocomplete="off" required>
+        </div>
+        <div class="input-box">
+            <input type="text" id="reason" class="input-field" placeholder="Reason for using our software" autocomplete="off" required>
+        </div>
+        <div class="input-box">
+            <input type="password" id="password" class="input-field" placeholder="Password" autocomplete="off" required>
+        </div>
+        <div class="input-box">
+            <input type="password" id="retype_password" class="input-field" placeholder="Retype Password" autocomplete="off" required>
+        </div>
+        <div class="input-submit">
+            <button class="submit-btn" id="submit">Sign Up</button>
+        </div>
+        <div class="sign-up-link">
+            <p>Already have an account? <a href="index.html">Login</a></p>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAGo_Dghioi_So3Kw9BDJ5S0Xi18f_-V4Y",
+            authDomain: "sa-seeds-team.firebaseapp.com",
+            projectId: "sa-seeds-team",
+            storageBucket: "sa-seeds-team.appspot.com",
+            messagingSenderId: "555618941591",
+            appId: "1:555618941591:web:bdf7dd7874410f74ce07d2",
+            measurementId: "G-ZYD59FW8R0"
+        };
+
+        // Initialize Firebase and Authentication
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+
+        document.getElementById('submit').onclick = async function() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const retypePassword = document.getElementById('retype_password').value;
+
+            if (password !== retypePassword) {
+                alert("Passwords do not match!");
+                return;
+            }
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                await sendEmailVerification(user);
+                alert("Registration successful! Please verify your email.");
+                // You can redirect to login page or keep them on the signup page
+            } catch (error) {
+                alert(error.message); // Show error message
+            }
+        };
+    </script>
+</body>
+</html>
