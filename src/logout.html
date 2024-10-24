@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmWatch - Logout</title>
+    <style>
+        :root {
+            --primary-green: #28a745;
+            --dark-navy: #1d2736;
+            --light-gray: #f8f9fa;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        nav {
+            background-color: var(--primary-green);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .logout-container {
+            max-width: 500px;
+            margin: 5rem auto;
+            padding: 2rem;
+            text-align: center;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logout-icon {
+            font-size: 3rem;
+            color: var(--primary-green);
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            color: var(--dark-navy);
+            margin-bottom: 1rem;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+            border: none;
+        }
+
+        .btn-confirm {
+            background-color: var(--primary-green);
+            color: white;
+        }
+
+        .btn-confirm:hover {
+            background-color: #218838;
+        }
+
+        .btn-cancel {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-cancel:hover {
+            background-color: #5a6268;
+        }
+
+        .reminder {
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: var(--light-gray);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-brand">🌾 FarmWatch</div>
+        <div class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="statistics.html">Statistics</a>
+            <a href="settings.html">Settings</a>
+            <a href="profile.html">Profile</a>
+            <a href="notifications.html">Notifications</a>
+        </div>
+    </nav>
+
+    <div class="logout-container">
+        <div class="logout-icon">🔒</div>
+        <h2>Confirm Logout</h2>
+        <p>Are you sure you want to log out of FarmWatch?</p>
+        
+        <div class="button-group">
+            <button class="btn btn-confirm">Yes, Log Out</button>
+            <button class="btn btn-cancel">Cancel</button>
+        </div>
+
+        <div class="reminder">
+            <strong>Reminder:</strong> Make sure you've saved any pending changes before logging out.
+            <br>
+            Your crop monitoring will continue even when you're logged out.
+        </div>
+    </div>
+</body>
+</html>

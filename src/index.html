@@ -2,112 +2,233 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="login&signup.css">
-    <title>Login | Mam_Hlase Software</title>
+    <title>FarmWatch - Smart Farming Assistant</title>
     <style>
-        .greeting-header {
-            text-align: center;
-            margin-bottom: 90px;
-            font-size: 36px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        nav {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1rem 2rem;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
             color: #333;
-            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #555;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #22c55e;
+        }
+
+        .sign-up {
+            background: #22c55e;
+            color: white !important;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+        }
+
+        .hero {
+            position: relative;
+            height: 500px;
+            color: white;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            padding: 0 1rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            background: #22c55e;
+            color: white;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #16a34a;
+        }
+
+        .features {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 1rem;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .feature-card img {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .feature-card p {
+            color: #666;
+        }
+
+        .cta {
+            background: #f0fdf4;
+            padding: 4rem 1rem;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .cta p {
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
         }
     </style>
 </head>
 <body>
-    <div class="login-box">
-        <div class="greeting-header">
-            <header id="greeting"></header>
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23f59e0b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='5'/%3E%3Cline x1='12' y1='1' x2='12' y2='3'/%3E%3Cline x1='12' y1='21' x2='12' y2='23'/%3E%3Cline x1='4.22' y1='4.22' x2='5.64' y2='5.64'/%3E%3Cline x1='18.36' y1='18.36' x2='19.78' y2='19.78'/%3E%3Cline x1='1' y1='12' x2='3' y2='12'/%3E%3Cline x1='21' y1='12' x2='23' y2='12'/%3E%3Cline x1='4.22' y1='19.78' x2='5.64' y2='18.36'/%3E%3Cline x1='18.36' y1='5.64' x2='19.78' y2='4.22'/%3E%3C/svg%3E" alt="Sun icon">
+                FarmWatch
+            </a>
+            <div class="nav-links">
+                <a href="home.html">Home</a>
+                <a href="statistics.html">Statistics</a>
+                <a href="settings.html">Settings</a>
+                <a href="profile.html">Profile</a>
+                <a href="logout.html">Logout</a>
+                <a href="notifications.html">Notifications</a>
+            </div>
         </div>
-        <div class="login-header">
-            <header>Login</header>
+    </nav>
+
+    <section class="hero">
+        <img src="images/welcomePageImage.jpeg" alt="Farm landscape" class="hero-img">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Smart Farming Starts Here</h1>
+            <p>Real-time weather insights for modern agriculture</p>
+            <button class="btn">Get Started</button>
         </div>
-        <div class="input-box">
-            <input type="text" class="input-field" id="email" placeholder="Email" autocomplete="off" required>
+    </section>
+
+    <section class="features">
+        <h2>Why Choose FarmWatch?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%230ea5e9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z'/%3E%3C/svg%3E" alt="Cloud icon">
+                <h3>Real-Time Weather Updates</h3>
+                <p>Get instant access to accurate weather data specific to your farm's location</p>
+            </div>
+            <div class="feature-card">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ef4444' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z'/%3E%3Cline x1='12' y1='9' x2='12' y2='13'/%3E%3Cline x1='12' y1='17' x2='12.01' y2='17'/%3E%3C/svg%3E" alt="Alert icon">
+                <h3>Early Warning System</h3>
+                <p>Receive immediate alerts about severe weather conditions and potential risks</p>
+            </div>
+            <div class="feature-card">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2322c55e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='16' y1='2' x2='16' y2='6'/%3E%3Cline x1='8' y1='2' x2='8' y2='6'/%3E%3Cline x1='3' y1='10' x2='21' y2='10'/%3E%3C/svg%3E" alt="Calendar icon">
+                <h3>Advanced Forecasting</h3>
+                <p>Plan ahead with accurate weekly and monthly weather predictions</p>
+            </div>
         </div>
-        <div class="input-box">
-            <input type="password" class="input-field" id="password" placeholder="Password" autocomplete="off" required>
-        </div>
-        <div class="forgot">
-            <section>
-                <input type="checkbox" id="check">
-                <label for="check">Remember me</label>
-            </section>
-            <section>
-                <a href="#">Forgot password</a>
-            </section>
-        </div>
-        <div class="input-submit">
-            <button class="submit-btn" id="submit">Sign In</button>
-        </div>
-        <div class="sign-up-link">
-            <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
-        </div>
-    </div>
+    </section>
 
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-analytics.js";
-        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
-
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyAGo_Dghioi_So3Kw9BDJ5S0Xi18f_-V4Y",
-            authDomain: "sa-seeds-team.firebaseapp.com",
-            projectId: "sa-seeds-team",
-            storageBucket: "sa-seeds-team.appspot.com",
-            messagingSenderId: "555618941591",
-            appId: "1:555618941591:web:bdf7dd7874410f74ce07d2",
-            measurementId: "G-ZYD59FW8R0"
-        };
-
-        // Initialize Firebase and Authentication
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const auth = getAuth();
-
-        document.getElementById('submit').onclick = async function() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            try {
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-
-                if (user.emailVerified) {
-                    console.log("User logged in successfully!");
-                    window.location.href = "../home.html"; // Redirect to home.html
-                } else {
-                    alert("Please verify your email before logging in.");
-                    auth.signOut(); // Sign out if email is not verified
-                }
-            } catch (error) {
-                alert(error.message); // Show error message
-            }
-        };
-
-        function setGreeting() {
-            const greetingElement = document.getElementById('greeting');
-            const hours = new Date().getHours();
-
-            let greeting = "Welcome to Mam_Hlase Software";
-
-            if (hours < 12) {
-                greeting = "Good Morning, " + greeting;
-            } else if (hours < 18) {
-                greeting = "Good Afternoon, " + greeting;
-            } else {
-                greeting = "Good Evening, " + greeting;
-            }
-
-            greetingElement.textContent = greeting;
-        }
-
-        window.onload = setGreeting;
-    </script>
-
+    <section class="cta">
+        <h2>Ready to Transform Your Farming?</h2>
+        <p>Join thousands of farmers who trust FarmWatch for their agricultural decisions</p>
+        <button class="btn">Start Free Trial</button>
+    </section>
 </body>
 </html>

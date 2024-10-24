@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmWatch - Statistics</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <style>
+        :root {
+            --primary-green: #28a745;
+            --dark-navy: #1d2736;
+            --light-gray: #f8f9fa;
+            --chart-blue: #007bff;
+            --chart-yellow: #ffc107;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        nav {
+            background-color: var(--primary-green);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .stats-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .stats-header select {
+            padding: 0.5rem;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card h3 {
+            color: var(--dark-navy);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-green);
+        }
+
+        .stat-card .trend {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .chart-header h3 {
+            color: var(--dark-navy);
+        }
+
+        .chart-controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .chart-controls button {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .chart-controls button:hover {
+            background-color: var(--light-gray);
+        }
+
+        .chart-controls button.active {
+            background-color: var(--primary-green);
+            color: white;
+            border-color: var(--primary-green);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .data-table th {
+            background-color: var(--light-gray);
+            font-weight: 600;
+        }
+
+        .data-table tr:hover {
+            background-color: var(--light-gray);
+        }
+
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-brand">🌾 FarmWatch</div>
+        <div class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="settings.html">Settings</a>
+            <a href="profile.html">Profile</a>
+            <a href="logout.html">Logout</a>
+            <a href="notifications.html">Notifications</a>
+        </div>
+    </nav>
+
+    <main>
+        <div class="stats-header">
+            <h2>Farm Statistics</h2>
+            <select>
+                <option>Last 7 Days</option>
+                <option>Last 30 Days</option>
+                <option>Last 3 Months</option>
+                <option>Last Year</option>
+            </select>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Yield</h3>
+                <div class="value">2,450</div>
+                <div class="trend">↑ 15% from last month</div>
+            </div>
+            <div class="stat-card">
+                <h3>Average Soil Moisture</h3>
+                <div class="value">65%</div>
+                <div class="trend">↓ 5% from last week</div>
+            </div>
+            <div class="stat-card">
+                <h3>Growth Rate</h3>
+                <div class="value">+2.3</div>
+                <div class="trend">On track with predictions</div>
+            </div>
+            <div class="stat-card">
+                <h3>Weather Score</h3>
+                <div class="value">8.5</div>
+                <div class="trend">Optimal conditions</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3>Crop Performance</h3>
+                <div class="chart-controls">
+                    <button class="active">Yield</button>
+                    <button>Growth</button>
+                    <button>Moisture</button>
+                </div>
+            </div>
+            <canvas id="performanceChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3>Weather Patterns</h3>
+                <div class="chart-controls">
+                    <button class="active">Temperature</button>
+                    <button>Rainfall</button>
+                    <button>Humidity</button>
+                </div>
+            </div>
+            <canvas id="weatherChart"></canvas>
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Crop Type</th>
+                    <th>Yield (kg)</th>
+                    <th>Growth Rate</th>
+                    <th>Soil Quality</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Oct 25, 2024</td>
+                    <td>Wheat</td>
+                    <td>1,250</td>
+                    <td>+2.1</td>
+                    <td>Good</td>
+                    <td>On Track</td>
+                </tr>
+                <tr>
+                    <td>Oct 24, 2024</td>
+                    <td>Corn</td>
+                    <td>980</td>
+                    <td>+1.8</td>
+                    <td>Excellent</td>
+                    <td>Ahead</td>
+                </tr>
+                <tr>
+                    <td>Oct 23, 2024</td>
+                    <td>Soybeans</td>
+                    <td>750</td>
+                    <td>+2.3</td>
+                    <td>Fair</td>
+                    <td>Monitor</td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+
+    <script>
+        // Performance Chart
+        const perfCtx = document.getElementById('performanceChart').getContext('2d');
+        new Chart(perfCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                datasets: [{
+                    label: 'Yield (tons)',
+                    data: [12, 19, 15, 17, 14, 15, 16],
+                    borderColor: var(--primary-green),
+                    tension: 0.4,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Weather Chart
+        const weatherCtx = document.getElementById('weatherChart').getContext('2d');
+        new Chart(weatherCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                datasets: [{
+                    label: 'Temperature (°F)',
+                    data: [65, 68, 70, 72, 75, 78, 80],
+                    backgroundColor: var(--chart-blue)
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmWatch - Notifications</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-green: #28a745;
+            --dark-green: #218838;
+            --light-gray: #f8f9fa;
+        }
+
+        .navbar {
+            background-color: var(--primary-green);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1.5rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .notification-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--primary-green);
+        }
+
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .notification-title {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .notification-time {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .notification-content {
+            color: #444;
+            line-height: 1.4;
+        }
+
+        .priority-high {
+            border-left-color: #dc3545;
+        }
+
+        .priority-medium {
+            border-left-color: #ffc107;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-bar {
+            background: var(--light-gray);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .filter-bar select {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">🌾 FarmWatch</div>
+        <div class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="profile.html">Profile</a>
+            <a href="settings.html">Settings</a>
+            <a href="logout.html">Logout</a>
+            <a href="statistics.html">Statistics</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Notifications</h1>
+
+        <div class="filter-bar">
+            <select>
+                <option>All Notifications</option>
+                <option>Weather Alerts</option>
+                <option>Crop Updates</option>
+                <option>System Alerts</option>
+            </select>
+            <select>
+                <option>All Priority</option>
+                <option>High Priority</option>
+                <option>Medium Priority</option>
+                <option>Low Priority</option>
+            </select>
+        </div>
+
+        <div class="notification-card priority-high">
+            <div class="notification-header">
+                <span class="notification-title">Severe Weather Alert</span>
+                <span class="notification-time">2 hours ago</span>
+            </div>
+            <div class="notification-content">
+                Heavy rainfall expected in your area tomorrow. Consider adjusting irrigation schedules.
+            </div>
+        </div>
+
+        <div class="notification-card priority-medium">
+            <div class="notification-header">
+                <span class="notification-title">Optimal Harvest Alert</span>
+                <span class="notification-time">5 hours ago</span>
+            </div>
+            <div class="notification-content">
+                Sector A crops have reached optimal maturity. Recommended harvest window: Next 48 hours.
+            </div>
+        </div>
+
+        <div class="notification-card">
+            <div class="notification-header">
+                <span class="notification-title">Soil Moisture Update</span>
+                <span class="notification-time">1 day ago</span>
+            </div>
+            <div class="notification-content">
+                Soil moisture levels in Sector B are within optimal range. No irrigation needed today.
+            </div>
+        </div>
+    </div>
+</body>
+</html>
