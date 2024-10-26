@@ -59,6 +59,49 @@
             color: #bbf7d0;
         }
 
+        /* Mobile Menu Styles */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: #16a34a;
+                flex-direction: column;
+                padding: 1rem;
+                gap: 1rem;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                z-index: 1000;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-container {
+                position: relative;
+            }
+
+            .nav-links a {
+                padding: 0.5rem 0;
+            }
+        }
+
         /* Greeting Section */
         .greeting {
             background-color: white;
@@ -225,18 +268,19 @@
             color: #9ca3af;
         }
 
-        /* Responsive Design */
+        /* Make search bar responsive */
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
+            .search-bar {
+                flex-direction: column;
             }
 
-            .dashboard-grid {
-                grid-template-columns: 1fr;
+            .search-input {
+                max-width: 100%;
             }
 
-            .footer-container {
-                grid-template-columns: 1fr;
+            .search-button,
+            .stats-button {
+                width: 100%;
             }
         }
     </style>
@@ -246,6 +290,9 @@
     <nav class="navbar">
         <div class="nav-container">
             <a href="#" class="logo">🌾 FarmWatch</a>
+            <button class="menu-toggle" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
             <div class="nav-links">
                 <a href="statistics.html">Statistics</a>
                 <a href="settings.html">Settings</a>
@@ -337,7 +384,24 @@
     </footer>
 
     <script>
-        // Simple script to update greeting based on time of day
+        // Mobile menu toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const navLinks = document.querySelector('.nav-links');
+
+            menuToggle.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.nav-container')) {
+                    navLinks.classList.remove('active');
+                }
+            });
+        });
+
+        // Update greeting based on time of day
         function updateGreeting() {
             const hour = new Date().getHours();
             const greetingText = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
