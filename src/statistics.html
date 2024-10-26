@@ -23,16 +23,27 @@
 
         nav {
             background-color: var(--primary-green);
-            padding: 1rem;
+            padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             color: white;
+            position: relative;
         }
 
         .nav-brand {
             font-size: 1.5rem;
             font-weight: bold;
+        }
+
+        .menu-icon {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
         }
 
         .nav-links a {
@@ -46,6 +57,27 @@
 
         .nav-links a:hover {
             background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                background-color: var(--primary-green);
+                z-index: 1;
+            }
+
+            .nav-links.show {
+                display: flex;
+            }
+
+            .menu-icon {
+                display: block;
+            }
         }
 
         main {
@@ -173,6 +205,7 @@
 <body>
     <nav>
         <div class="nav-brand">🌾 FarmWatch</div>
+        <div class="menu-icon">☰</div>
         <div class="nav-links">
             <a href="home.html">Home</a>
             <a href="settings.html">Settings</a>
@@ -290,7 +323,7 @@
                 datasets: [{
                     label: 'Yield (tons)',
                     data: [12, 19, 15, 17, 14, 15, 16],
-                    borderColor: var(--primary-green),
+                    borderColor: 'rgba(40, 167, 69, 1)', // Using rgba here directly for Chart.js compatibility
                     tension: 0.4,
                     fill: false
                 }]
@@ -319,7 +352,7 @@
                 datasets: [{
                     label: 'Temperature (°F)',
                     data: [65, 68, 70, 72, 75, 78, 80],
-                    backgroundColor: var(--chart-blue)
+                    backgroundColor: 'rgba(0, 123, 255, 1)' // Using rgba here directly for Chart.js compatibility
                 }]
             },
             options: {

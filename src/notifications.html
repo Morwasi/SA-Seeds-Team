@@ -33,9 +33,14 @@
             font-weight: bold;
         }
 
+        .menu-icon {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
         .nav-links {
             display: flex;
-            align-items: center;
         }
 
         .nav-links a {
@@ -44,72 +49,25 @@
             margin-left: 1.5rem;
         }
 
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            padding: 5px;
-        }
-
-        .menu-toggle span {
-            display: block;
-            width: 25px;
-            height: 3px;
-            background-color: white;
-            transition: all 0.3s ease;
-        }
-
-        @media screen and (max-width: 768px) {
-            .menu-toggle {
-                display: flex;
-            }
-
+        @media (max-width: 768px) {
             .nav-links {
                 display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background-color: var(--primary-green);
                 flex-direction: column;
-                padding: 1rem;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+                width: 100%;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                background-color: var(--primary-green);
+                z-index: 1;
             }
 
-            .nav-links.active {
+            .nav-links.show {
                 display: flex;
             }
 
-            .nav-links a {
-                margin: 0.5rem 0;
-                padding: 0.5rem 0;
-                width: 100%;
-                text-align: center;
+            .menu-icon {
+                display: block;
             }
-
-            .menu-toggle.active span:first-child {
-                transform: rotate(45deg) translate(5px, 5px);
-            }
-
-            .menu-toggle.active span:nth-child(2) {
-                opacity: 0;
-            }
-
-            .menu-toggle.active span:last-child {
-                transform: rotate(-45deg) translate(5px, -5px);
-            }
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            margin-left: 1.5rem;
         }
 
         .container {
@@ -181,6 +139,7 @@
 <body>
     <nav class="navbar">
         <div class="logo">🌾 FarmWatch</div>
+        <div class="menu-icon">☰</div>
         <div class="nav-links">
             <a href="home.html">Home</a>
             <a href="profile.html">Profile</a>
@@ -238,5 +197,16 @@
             </div>
         </div>
     </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuIcon = document.querySelector('.menu-icon');
+            const navLinks = document.querySelector('.nav-links');
+
+            menuIcon.addEventListener('click', function() {
+                navLinks.classList.toggle('show');
+            });
+        });
+    </script>
 </body>
 </html>
