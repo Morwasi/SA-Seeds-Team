@@ -20,7 +20,6 @@
             flex-direction: column;
         }
 
-        /* Navigation Styles */
         .navbar {
             background-color: #16a34a;
             padding: 1rem;
@@ -59,7 +58,6 @@
             color: #bbf7d0;
         }
 
-        /* Mobile Menu Styles */
         .menu-toggle {
             display: none;
             background: none;
@@ -102,7 +100,6 @@
             }
         }
 
-        /* Greeting Section */
         .greeting {
             background-color: white;
             padding: 1rem;
@@ -124,7 +121,6 @@
             margin-top: 0.25rem;
         }
 
-        /* Main Content */
         .main-content {
             max-width: 1200px;
             margin: 0 auto;
@@ -132,7 +128,6 @@
             flex-grow: 1;
         }
 
-        /* Search Bar */
         .search-bar {
             display: flex;
             gap: 0.5rem;
@@ -165,7 +160,6 @@
             cursor: pointer;
         }
 
-        /* Notifications */
         .notifications {
             background-color: white;
             padding: 1rem;
@@ -196,7 +190,6 @@
             margin-bottom: 0.5rem;
         }
 
-        /* Dashboard Grid */
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -220,7 +213,6 @@
             color: #6b7280;
         }
 
-        /* Footer */
         .footer {
             background-color: #1f2937;
             color: white;
@@ -268,7 +260,6 @@
             color: #9ca3af;
         }
 
-        /* Make search bar responsive */
         @media (max-width: 768px) {
             .search-bar {
                 flex-direction: column;
@@ -283,10 +274,54 @@
                 width: 100%;
             }
         }
+
+        .weather-card {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 1px 6px rgba(32,33,36,0.28);
+            margin-top: 10px;
+            display: none;
+        }
+        .main-temp {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .temp-number {
+            font-size: 24px;
+            font-weight: 400;
+        }
+        .weather-icon {
+            width: 32px;
+            height: 32px;
+            background: #f8f9fa;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .weather-details {
+            color: #70757a;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #70757a;
+            display: none;
+        }
+        .error {
+            color: #d93025;
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
             <a href="#" class="logo">🌾 FarmWatch</a>
@@ -303,7 +338,6 @@
         </div>
     </nav>
 
-    <!-- Greeting -->
     <div class="greeting">
         <div class="greeting-container">
             <h2>Good morning, John! 🌱</h2>
@@ -311,16 +345,13 @@
         </div>
     </div>
 
-    <!-- Main Content -->
     <main class="main-content">
-        <!-- Search Bar -->
         <div class="search-bar">
-            <input type="text" placeholder="Enter Location..." class="search-input">
-            <button class="search-button">Search</button>
+            <input type="text" id="locationSearch" placeholder="Enter Location..." class="search-input">
+            <button onclick="searchWeather()" class="search-button">Search</button>
             <button class="stats-button">📊 Statistics</button>
         </div>
 
-        <!-- Notifications -->
         <div class="notifications">
             <div class="notifications-header">
                 <h3><i class="fas fa-bell"></i> Notifications</h3>
@@ -330,23 +361,32 @@
             <div class="notification-item">Optimal harvest time for Sector A approaching</div>
         </div>
 
-        <!-- Dashboard Grid -->
         <div class="dashboard-grid">
             <div class="dashboard-card">
-                <h3>Location: -</h3>
-                <p>--°C--</p>
+                <h3>Location: <span id="location-name"></span></h3>
+                <div id="weather-container" class="weather-card">
+                    <div class="main-temp">
+                        <div class="weather-icon">☀️</div>
+                        <div class="temp-number"><span id="current-temp"></span>°C</div>
+                    </div>
+                    <div class="weather-details">
+                        <div id="weather-description"></div>
+                        <div>Precipitation: <span id="precipitation"></span></div>
+                        <div>Humidity: <span id="humidity"></span></div>
+                        <div>Wind: <span id="wind"></span></div>
+                    </div>
+                </div>
+                <div id="loading" class="loading">Loading weather data...</div>
+                <div id="error" class="error"></div>
             </div>
-            
             <div class="dashboard-card">
                 <h3>⚡ Crop Growth Insights</h3>
                 <p>Current growth conditions will be displayed here...</p>
             </div>
-            
             <div class="dashboard-card">
                 <h3>🌾 Harvest Conditions</h3>
                 <p>Harvesting details will be shown here...</p>
             </div>
-            
             <div class="dashboard-card">
                 <h3>📈 Historical Weather Data</h3>
                 <p>Weather history and trends will appear here...</p>
@@ -354,7 +394,6 @@
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-section">
@@ -384,7 +423,6 @@
     </footer>
 
     <script>
-        // Mobile menu toggle functionality
         document.addEventListener('DOMContentLoaded', function() {
             const menuToggle = document.querySelector('.menu-toggle');
             const navLinks = document.querySelector('.nav-links');
@@ -393,7 +431,6 @@
                 navLinks.classList.toggle('active');
             });
 
-            // Close menu when clicking outside
             document.addEventListener('click', function(event) {
                 if (!event.target.closest('.nav-container')) {
                     navLinks.classList.remove('active');
@@ -401,13 +438,55 @@
             });
         });
 
-        // Update greeting based on time of day
         function updateGreeting() {
             const hour = new Date().getHours();
             const greetingText = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
             document.querySelector('.greeting-container h2').textContent = `${greetingText}, John! 🌱`;
         }
         updateGreeting();
+
+
+        const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+        async function searchWeather() {
+            const location = document.getElementById('locationSearch').value.trim();
+            if (!location) return;
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('weather-container').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
+            document.getElementById('location-name').textContent = location;
+
+            try {
+                const response = await fetch(`https://api.tomorrow.io/v4/weather/realtime?location=${location}&apikey=xEqumIcghTsJZR23DXvHOFIpNmPJBPWs`); // Replace with your API key
+                const weatherData = await response.json();
+
+                displayWeather(weatherData);
+            } catch (error) {
+                document.getElementById('error').textContent = 'Error fetching weather data. Please try again.';
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        function displayWeather(weatherData) {
+            const weather = weatherData.data.values;
+
+            document.getElementById('current-temp').textContent = Math.round(weather.temperature);
+            document.getElementById('precipitation').textContent = `${weather.precipitationProbability}%`;
+            document.getElementById('humidity').textContent = `${weather.humidity}%`;
+            document.getElementById('wind').textContent = `${weather.windSpeed} km/h`;
+            document.getElementById('weather-description').textContent = weather.weatherCode; 
+
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('weather-container').style.display = 'block';
+        }
+
+        document.getElementById('locationSearch').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchWeather();
+            }
+        });
     </script>
 </body>
 </html>
