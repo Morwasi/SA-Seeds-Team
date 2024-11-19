@@ -1,6 +1,8 @@
 {
   "dependencies": {
-    "firebase": "^10.14.0"
+    "express": "^4.21.1",
+    "firebase": "^10.14.0",
+    "node-fetch": "^2.7.0"
   },
   "scripts": {
     "build": "cp -r src/* dist/",
@@ -11,5 +13,20 @@
     "http-server": "^14.1.1",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14"
-  }
+  },
+  "name": "sa-seeds-team",
+  "description": "Welcome to the project! Follow the instructions below to set up the project on your local machine.",
+  "version": "1.0.0",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Morwasi/SA-Seeds-Team.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Morwasi/SA-Seeds-Team/issues"
+  },
+  "homepage": "https://github.com/Morwasi/SA-Seeds-Team#readme"
 }

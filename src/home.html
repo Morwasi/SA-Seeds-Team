@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FarmWatch Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -319,6 +320,63 @@
             padding: 20px;
             display: none;
         }
+        .weather-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 6px rgba(32,33,36,0.28);
+            margin-top: 10px;
+            display: none;
+        }
+        .main-temp {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .temp-number {
+            font-size: 36px;
+            font-weight: 500;
+        }
+        .weather-icon {
+            width: 48px;
+            height: 48px;
+            background: #f8f9fa;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        .weather-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            color: #374151;
+            font-size: 14px;
+        }
+        .weather-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px;
+            background: #f9fafb;
+            border-radius: 6px;
+        }
+        .weather-item i {
+            width: 20px;
+            color: #16a34a;
+        }
+        .weather-label {
+            color: #6b7280;
+            font-size: 12px;
+            display: block;
+        }
+        .weather-value {
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
@@ -366,19 +424,75 @@
                 <h3>Location: <span id="location-name"></span></h3>
                 <div id="weather-container" class="weather-card">
                     <div class="main-temp">
-                        <div class="weather-icon">☀️</div>
-                        <div class="temp-number"><span id="current-temp"></span>°C</div>
+                        <div class="weather-icon" id="weather-icon"></div>
+                        <div>
+                            <div class="temp-number"><span id="current-temp"></span>°C</div>
+                            <div id="weather-description" style="color: #6b7280;"></div>
+                        </div>
                     </div>
                     <div class="weather-details">
-                        <div id="weather-description"></div>
-                        <div>Precipitation: <span id="precipitation"></span></div>
-                        <div>Humidity: <span id="humidity"></span></div>
-                        <div>Wind: <span id="wind"></span></div>
+                        <div class="weather-item">
+                            <i class="fas fa-tint"></i>
+                            <div>
+                                <span class="weather-label">Humidity</span>
+                                <span class="weather-value" id="humidity"></span>
+                            </div>
+                        </div>
+                        <div class="weather-item">
+                            <i class="fas fa-cloud-rain"></i>
+                            <div>
+                                <span class="weather-label">Precipitation</span>
+                                <span class="weather-value" id="precipitation"></span>
+                            </div>
+                        </div>
+                        <div class="weather-item">
+                            <i class="fas fa-wind"></i>
+                            <div>
+                                <span class="weather-label">Wind Speed</span>
+                                <span class="weather-value" id="wind"></span>
+                            </div>
+                        </div>
+                        <div class="weather-item">
+                            <i class="fas fa-compass"></i>
+                            <div>
+                                <span class="weather-label">Wind Direction</span>
+                                <span class="weather-value" id="wind-direction"></span>
+                            </div>
+                        </div>
+                        <div class="weather-item">
+                            <i class="fas fa-temperature-low"></i>
+                            <div>
+                                <span class="weather-label">Dew Point</span>
+                                <span class="weather-value" id="dew-point"></span>
+                            </div>
+                        </div>
+                        <div class="weather-item">
+                            <i class="fas fa-compress-arrows-alt"></i>
+                            <div>
+                                <span class="weather-label">Pressure</span>
+                                <span class="weather-value" id="pressure"></span>
+                            </div>
+                        </div>
+                        <div class="weather-item">
+                            <i class="fas fa-sun"></i>
+                            <div>
+                                <span class="weather-label">UV Index</span>
+                                <span class="weather-value" id="uv-index"></span>
+                            </div>
+                        </div>
+                        <div class="weather-item">
+                            <i class="fas fa-eye"></i>
+                            <div>
+                                <span class="weather-label">Visibility</span>
+                                <span class="weather-value" id="visibility"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div id="loading" class="loading">Loading weather data...</div>
                 <div id="error" class="error"></div>
             </div>
+
             <div class="dashboard-card">
                 <h3>⚡ Crop Growth Insights</h3>
                 <p>Current growth conditions will be displayed here...</p>
@@ -445,7 +559,7 @@
         }
         updateGreeting();
 
-
+ 
         const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
         async function searchWeather() {
@@ -487,6 +601,67 @@
                 searchWeather();
             }
         });
+
+        function displayWeather(weatherData) {
+        const weather = weatherData.data.values;
+
+        // Update main temperature and description
+        document.getElementById('current-temp').textContent = Math.round(weather.temperature);
+        
+        // Map weather codes to descriptions and icons
+        const weatherCodes = {
+            1000: { description: 'Clear Sky', icon: '☀️' },
+            1100: { description: 'Mostly Clear', icon: '🌤️' },
+            1101: { description: 'Partly Cloudy', icon: '⛅' },
+            1102: { description: 'Mostly Cloudy', icon: '🌥️' },
+            1001: { description: 'Cloudy', icon: '☁️' },
+            2000: { description: 'Fog', icon: '🌫️' },
+            4000: { description: 'Drizzle', icon: '🌧️' },
+            4001: { description: 'Rain', icon: '🌧️' },
+            4200: { description: 'Light Rain', icon: '🌦️' },
+            4201: { description: 'Heavy Rain', icon: '⛈️' },
+            5000: { description: 'Snow', icon: '🌨️' },
+            5001: { description: 'Flurries', icon: '🌨️' },
+            5100: { description: 'Light Snow', icon: '🌨️' },
+            5101: { description: 'Heavy Snow', icon: '❄️' },
+            6000: { description: 'Freezing Drizzle', icon: '🌧️' },
+            6001: { description: 'Freezing Rain', icon: '🌧️' },
+            7000: { description: 'Ice Pellets', icon: '🌨️' },
+            7101: { description: 'Heavy Ice Pellets', icon: '🌨️' },
+            8000: { description: 'Thunderstorm', icon: '⛈️' }
+        };
+
+        const weatherInfo = weatherCodes[weather.weatherCode] || { description: 'Unknown', icon: '❓' };
+        document.getElementById('weather-icon').textContent = weatherInfo.icon;
+        document.getElementById('weather-description').textContent = weatherInfo.description;
+
+        // Update all weather details
+        document.getElementById('humidity').textContent = `${weather.humidity}%`;
+        document.getElementById('precipitation').textContent = `${weather.precipitationProbability}%`;
+        document.getElementById('wind').textContent = `${weather.windSpeed.toFixed(1)} km/h`;
+        document.getElementById('wind-direction').textContent = `${getWindDirection(weather.windDirection)}`;
+        document.getElementById('dew-point').textContent = `${weather.dewPoint.toFixed(1)}°C`;
+        document.getElementById('pressure').textContent = `${weather.pressureSurfaceLevel.toFixed(1)} hPa`;
+        document.getElementById('uv-index').textContent = `${weather.uvIndex} (${getUVDescription(weather.uvIndex)})`;
+        document.getElementById('visibility').textContent = `${weather.visibility} km`;
+
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('weather-container').style.display = 'block';
+    }
+
+    function getWindDirection(degrees) {
+        const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+        const index = Math.round(degrees / 22.5) % 16;
+        return directions[index];
+    }
+
+    function getUVDescription(uvIndex) {
+        if (uvIndex <= 2) return 'Low';
+        if (uvIndex <= 5) return 'Moderate';
+        if (uvIndex <= 7) return 'High';
+        if (uvIndex <= 10) return 'Very High';
+        return 'Extreme';
+    }
     </script>
 </body>
 </html>
