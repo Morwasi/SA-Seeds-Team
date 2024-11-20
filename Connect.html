@@ -435,41 +435,70 @@
     </div>
 
     <script>
+        // Sample farmers database with multiple unit sizes
         const farmersDatabase = [
-            {
-                name: "John Smith",
-                crop: "maize",
-                units: 5000,
-                location: "Farmville",
-                contact: "+1234567890",
-                rating: 4.8,
-                verified: true,
-                premium: true,
-                image: "/api/placeholder/80/80"
-            },
-            {
-                name: "Emma Davis",
-                crop: "wheat",
-                units: 10000,
-                location: "Wheatland",
-                contact: "+2345678901",
-                rating: 4.9,
-                verified: true,
-                premium: false,
-                image: "/api/placeholder/80/80"
-            },
-            // Add more farmers with similar structure...
+            { name: "John Smith", crop: "maize", units: 5000, location: "Farmville", contact: "+1234567890" },
+            { name: "Emma Davis", crop: "wheat", units: 10000, location: "Wheatland", contact: "+2345678901" },
+            { name: "Michael Brown", crop: "soybean", units: 15000, location: "Greenfield", contact: "+3456789012" },
+            { name: "Sarah Wilson", crop: "potato", units: 20000, location: "Highland", contact: "+4567890123" },
+            { name: "James Johnson", crop: "maize", units: 25000, location: "Cornville", contact: "+5678901234" },
+            { name: "Lisa Anderson", crop: "tomato", units: 30000, location: "Riverside", contact: "+6789012345" },
+            { name: "Robert Taylor", crop: "wheat", units: 35000, location: "Plains City", contact: "+7890123456" },
+            { name: "Jennifer Martin", crop: "soybean", units: 40000, location: "Valley Farm", contact: "+8901234567" },
+            { name: "William White", crop: "potato", units: 45000, location: "Mountain View", contact: "+9012345678" },
+            { name: "Maria Garcia", crop: "tomato", units: 50000, location: "Sun Valley", contact: "+0123456789" }
         ];
 
         document.getElementById('farmerForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
-            // Show loading state
-            const matchesSection = document.getElementById('matches');
-            const loadingElement = document.getElementById('loading');
-            matchesSection.style.display = 'block';
-            loadingElement.style.display = 'block';
-
             // Get form values
             const cropType = document.getElementById('cropType').value;
-            const minUnits = parseInt
+            const minUnits = parseInt(document.getElementById('minUnits').value);
+            const maxUnits = parseInt(document.getElementById('maxUnits').value);
+
+            // Filter matching farmers
+            const matches = farmersDatabase.filter(farmer =>
+                farmer.crop === cropType &&
+                farmer.units >= minUnits &&
+                farmer.units <= maxUnits
+            );
+
+            // Show matches section
+            const matchesSection = document.getElementById('matches');
+            const matchesList = document.getElementById('matchesList');
+            matchesSection.style.display = 'block';
+            matchesList.innerHTML = '';
+
+            if (matches.length === 0) {
+                matchesList.innerHTML = `
+                    <div class="no-matches">
+                        <i class="fas fa-search" style="font-size: 2rem; color: #ccc; margin-bottom: 1rem;"></i>
+                        <p>No matching farmers found. Try adjusting your unit range.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            matches.forEach(farmer => {
+                const matchItem = document.createElement('div');
+                matchItem.className = 'match-item';
+                matchItem.innerHTML = `
+                    <div class="match-header">
+                        <span class="match-name"><i class="fas fa-user"></i> ${farmer.name}</span>
+                        <button class="contact-btn" onclick="alert('Contact: ${farmer.contact}')">
+                            <i class="fas fa-phone"></i> Contact
+                        </button>
+                    </div>
+                    <div class="match-details">
+                        <p><i class="fas fa-wheat-awn"></i> Crop: ${farmer.crop.charAt(0).toUpperCase() + farmer.crop.slice(1)}</p>
+                        <p><i class="fas fa-scale-balanced"></i> Units Available: ${farmer.units.toLocaleString()} kg</p>
+                        <p><i class="fas fa-location-dot"></i> Location: ${farmer.location}</p>
+                    </div>
+                `;
+                matchesList.appendChild(matchItem);
+            });
+        });
+    </script>
+</body>
+</html>

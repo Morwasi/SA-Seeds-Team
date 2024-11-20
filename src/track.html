@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmWatch - Livestock Tracking</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+                :root {
+            --primary-green: #28a745;
+            --dark-navy: #1d2736;
+            --light-gray: #f8f9fa;
+            --chat-bg: #f1f1f1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body, html {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+    background-color: #16a34a;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    margin-left: auto; /* This pushes the nav-links to the right */
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nav-links a:hover {
+    color: #bbf7d0;
+}
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+    }
+
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: #16a34a;
+        flex-direction: column;
+        padding: 1rem;
+        gap: 1rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        z-index: 1000;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .nav-container {
+        position: relative;
+    }
+
+    .nav-links a {
+        padding: 0.5rem 0;
+    }
+}
+
+        .main-container {
+            flex: 1;
+            display: flex;
+            padding: 1rem;
+            gap: 1rem;
+            height: calc(100vh - 64px);
+        }
+
+        .map-container {
+            flex: 2;
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        .sidebar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 400px;
+        }
+
+        .status-card {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .herd-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .herd-stats {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-green);
+        }
+
+        .stat-label {
+            color: var(--dark-navy);
+            font-size: 0.9rem;
+        }
+
+        .alerts {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .alert-item {
+            padding: 0.8rem;
+            border-left: 4px solid var(--primary-green);
+            margin-bottom: 0.8rem;
+            background-color: var(--light-gray);
+        }
+
+        .alert-title {
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+
+        .alert-time {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .spinner {
+            border: 8px solid var(--light-gray);
+            border-top: 8px solid var(--primary-green);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .tracking-info {
+            background-color: rgba(255, 255, 255, 0.9);
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: var(--dark-navy);
+            width: 250px;
+            z-index: 1000;
+        }
+
+        .cow-info {
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">Live track your livestock here</a>
+            <button class="menu-toggle" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="nav-links">
+                <a href="home.html">Home</a>
+                <a href="statistics.html">Statistics</a>
+                <a href="settings.html">Settings</a>
+                <a href="profile.html">Profile</a>
+                <a href="logout.html">Logout</a>
+                <a href="notifications.html">Notifications</a>
+                <a href="#"><i class="fas fa-comment-dots"></i> Chat</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div class="loading-message">Loading tracking data...</div>
+    </div>
+
+    <div class="main-container">
+        <div class="map-container">
+            <div id="map"></div>
+            <div class="tracking-info" id="trackingInfo">
+                <h3>Live Tracking Details</h3>
+                <div id="cowDetails"></div>
+            </div>
+        </div>
+        
+        <div class="sidebar">
+            <div class="status-card">
+                <h2>Herd Overview</h2>
+                <div class="herd-info">
+                    <div class="herd-stats">
+                        <div class="stat-value">80</div>
+                        <div class="stat-label">Total Cattle</div>
+                    </div>
+                    <div class="herd-stats">
+                        <div class="stat-value">4</div>
+                        <div class="stat-label">Tracked Units</div>
+                    </div>
+                    <div class="herd-stats">
+                        <div class="stat-value">100%</div>
+                        <div class="stat-label">All Present</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alerts">
+                <h2>Recent Activity</h2>
+                <div id="alertsList">
+                    <div class="alert-item">
+                        <div class="alert-title">Herd #2 Movement Detected</div>
+                        <div class="alert-content">Moving towards east pasture</div>
+                        <div class="alert-time">2 minutes ago</div>
+                    </div>
+                    <div class="alert-item">
+                        <div class="alert-title">Tracker Battery Low</div>
+                        <div class="alert-content">Unit #3 battery at 15%</div>
+                        <div class="alert-time">15 minutes ago</div>
+                    </div>
+                    <div class="alert-item">
+                        <div class="alert-title">Geofence Alert</div>
+                        <div class="alert-content">Herd #1 approaching boundary</div>
+                        <div class="alert-time">1 hour ago</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+
+            //Ensure Leaflet is loaded before initializing the map.
+            const initializeMap = () => {
+                const map = L.map('map').setView([37.7749, -122.4194], 14);
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                }).addTo(map);
+
+                const cowIcon = L.icon({
+                    iconUrl: 'https://cdn-icons-png.flaticon.com/512/4472/4472498.png',
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 15]
+                });
+
+                const cowPositions = [
+                    { id: 'C12345', lat: -29.8587, lng: 31.0300, herdName: 'Herd #1' }, // Example coordinates in KZN
+                    { id: 'C12346', lat: -29.8650, lng: 31.0500, herdName: 'Herd #2' }, // Example coordinates in KZN
+                    { id: 'C12347', lat: -29.8400, lng: 31.0100, herdName: 'Herd #3' }, // Example coordinates in KZN
+                    { id: 'C12348', lat: -29.8700, lng: 31.0200, herdName: 'Herd #4' }  // Example coordinates in KZN
+                ];
+
+                const markers = [];
+                const circles = [];
+
+                cowPositions.forEach((position, index) => {
+                    const marker = L.marker([position.lat, position.lng], { icon: cowIcon })
+                        .bindPopup(`
+                            <b>${position.herdName}</b><br>
+                            ID: ${position.id}<br>
+                            Herd Size: ~20 cows<br>
+                            Status: Active
+                        `)
+                        .addTo(map);
+                    markers.push(marker);
+
+                    const circle = L.circle([position.lat, position.lng], {
+                        color: 'green',
+                        fillColor: 'green',
+                        fillOpacity: 0.2,
+                        radius: 200
+                    }).addTo(map);
+                    circles.push(circle);
+                });
+
+                function moveMarkers() {
+                    markers.forEach((marker, index) => {
+                        const newLat = cowPositions[index].lat + (Math.random() - 0.5) * 0.0005;
+                        const newLng = cowPositions[index].lng + (Math.random() - 0.5) * 0.0005;
+                        const newPosition = { lat: newLat, lng: newLng };
+
+                        marker.setLatLng(newPosition);
+                        circles[index].setLatLng(newPosition);
+
+                        cowPositions[index].lat = newLat;
+                        cowPositions[index].lng = newLng;
+                    });
+
+                    updateCowDetails();
+                }
+
+                function updateCowDetails() {
+                    const cowDetailsElement = document.getElementById('cowDetails');
+                    cowDetailsElement.innerHTML = cowPositions.map(cow => `
+                        <div class="cow-info">
+                            <strong>${cow.herdName}</strong><br>
+                            <strong>ID:</strong> ${cow.id}<br>
+                            <strong>Location:</strong> ${cow.lat.toFixed(4)}, ${cow.lng.toFixed(4)}<br>
+                            <strong>Herd Size:</strong> ~20 cows
+                        </div>
+                    `).join('');
+                }
+
+                // Initial update
+                updateCowDetails();
+
+                // Update positions every 2 seconds
+                setInterval(moveMarkers, 2000);
+            }
+
+            //Hide loading screen immediately after DOM is loaded
+            loadingOverlay.style.display = 'none';
+            initializeMap();
+
+
+            // Update "Last Update" time
+            setInterval(() => {
+                document.getElementById('lastUpdate').textContent = 
+                    'Last Update: ' + new Date().toLocaleTimeString();
+            }, 5000);
+        });
+    </script>
+    <script>
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+  
+        menuToggle.addEventListener('click', () => {
+          navLinks.classList.toggle('active');
+        });
+      </script>
+</body>
+</html>

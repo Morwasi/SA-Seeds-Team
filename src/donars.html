@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmWatch - Donation Requests</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-green: #28a745;
+            --dark-navy: #1d2736;
+            --light-gray: #f8f9fa;
+            --accent-blue: #5bc0de; /* Added accent color */
+            --accent-orange: #f0ad4e; /* Added accent color */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            min-height: 100vh; /* Ensure content fills viewport */
+        }
+
+
+        /* Navigation Bar Styles */
+        .navbar {
+            background-color: var(--primary-green);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            width: 100%; /* Ensure navbar spans full width */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: sticky; /* Keep navbar fixed on scroll */
+            top: 0;
+            z-index: 10; /* Ensure navbar is above other elements */
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1.5rem;
+        }
+
+        .nav-links a:hover {
+            color: #bbf7d0;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                background-color: var(--primary-green);
+                z-index: 1;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+        }
+
+
+        .request-list {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+        }
+
+        .request-item {
+            margin: 15px 0;
+            padding: 10px;
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+            display: flex; /* Use flexbox for better layout */
+            align-items: center;
+            gap: 15px;
+        }
+
+        .request-item:hover {
+            background-color: var(--light-gray);
+        }
+
+        .request-info {
+            flex-grow: 1; /* Allow info to expand */
+        }
+
+        .request-info strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .request-details {
+            margin-top: 10px;
+            color: #555; /* Slightly darker text color */
+        }
+
+        .donate-button,
+        .cancel-button {
+            margin-top: 10px;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .donate-button {
+            background-color: var(--primary-green);
+            color: white;
+        }
+
+        .donate-button:hover {
+            background-color: #218838;
+        }
+
+        .cancel-button {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .cancel-button:hover {
+            background-color: #5a6268;
+        }
+
+        .success-alert {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            text-align: center;
+        }
+
+        .success-alert p {
+            margin-bottom: 10px;
+        }
+
+        .success-button {
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .success-button:hover {
+            background-color: #218838;
+        }
+
+        .details {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .profile-picture {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Color-coded help types */
+        .request-item[data-help-type="equipment"] {
+            border-color: var(--accent-blue);
+        }
+
+        .request-item[data-help-type="donation"] {
+            border-color: var(--accent-orange);
+        }
+
+        .view-details {
+            background-color: #007bff; /* Blue */
+            color: white;
+        }
+        .view-details:hover{
+            background-color: #0069d9;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">🌾 FarmWatch</a>
+            <button class="menu-toggle" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="nav-links">
+                <a href="home.html">Home</a>
+                <a href="statistics.html">Statistics</a>
+                <a href="settings.html">Settings</a>
+                <a href="profile.html">Profile</a>
+                <a href="logout.html">Logout</a>
+                <a href="notifications.html">Notifications</a>
+                <a href="track.html">Track</a>
+                <a href="#"><i class="fas fa-comment-dots"></i> Chat</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="header">Donation Requests</div>
+
+    <div class="request-list" id="requestList">
+        <div class="request-item" data-id="1" data-help-type="equipment">
+            <img src="john_smith.jpg" alt="John Smith" class="profile-picture">
+            <div class="request-info">
+                <strong>Name:</strong> John Smith<br>
+                <strong>Help Type:</strong> Equipment<br>
+                <div class="request-details">Needs funding for new plowing equipment. He needs a new plow to cultivate his fields more efficiently, increasing his yield and income. His current plow is broken and beyond repair.</div>
+                <div class="button-container">
+                    <button class="donate-button" style="display:none;" onclick="donate('John Smith')">Donate</button>
+                    <button class="cancel-button" style="display:none;" onclick="cancel(1)">Cancel</button>
+                    <button class="view-details" onclick="toggleDetails(this)">View Details</button>
+                </div>
+            </div>
+        </div>
+        <div class="request-item" data-id="3" data-help-type="donation">
+            <img src="michael_brown.jpg" alt="Michael Brown" class="profile-picture">
+            <div class="request-info">
+                <strong>Name:</strong> Michael Brown<br>
+                <strong>Help Type:</strong> Donation<br>
+                <div class="request-details">Needs financial support for new barn construction. His old barn is dilapidated and unsafe, posing risks to his livestock and stored crops. A new barn is crucial for continued operation. He has secured permits and has a detailed construction plan.</div>
+                <div class="button-container">
+                    <button class="donate-button" style="display:none;" onclick="donate('Michael Brown')">Donate</button>
+                    <button class="cancel-button" style="display:none;" onclick="cancel(3)">Cancel</button>
+                    <button class="view-details" onclick="toggleDetails(this)">View Details</button>
+                </div>
+            </div>
+        </div>
+        <div class="request-item" data-id="4" data-help-type="other">
+            <img src="emily_davis.jpg" alt="Emily Davis" class="profile-picture">
+            <div class="request-info">
+                <strong>Name:</strong> Emily Davis<br>
+                <strong>Help Type:</strong> Other<br>
+                <div class="request-details">Assistance required for organic farming practices. She needs help transitioning to organic farming methods, including soil testing, composting techniques, and pest control strategies. She's already completed a workshop on organic farming principles.</div>
+                <div class="button-container">
+                    <button class="donate-button" style="display:none;" onclick="donate('Emily Davis')">Donate</button>
+                    <button class="cancel-button" style="display:none;" onclick="cancel(4)">Cancel</button>
+                    <button class="view-details" onclick="toggleDetails(this)">View Details</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="success-alert" id="successAlert">
+        <p>Your donation has been successfully processed!</p>
+        <button class="success-button" id="closeSuccess">Close</button>
+    </div>
+
+    <script>
+        function toggleDetails(button) {
+            const requestItem = button.parentNode.parentNode;
+            const details = requestItem.querySelector('.details');
+            const donateButton = requestItem.querySelector('.donate-button');
+            const cancelButton = requestItem.querySelector('.cancel-button');
+
+            details.style.display = details.style.display === 'block' ? 'none' : 'block';
+            donateButton.style.display = details.style.display === 'block' ? 'inline-block' : 'none';
+            cancelButton.style.display = details.style.display === 'block' ? 'inline-block' : 'none';
+        }
+
+        function donate(name) {
+            const successAlert = document.getElementById('successAlert');
+            successAlert.style.display = 'block';
+            console.log(`Donation made to ${name}.`);
+        }
+
+        function cancel(requestId) {
+            const requestItem = document.querySelector(`.request-item[data-id="${requestId}"]`);
+            if (requestItem) {
+                const donateButton = requestItem.querySelector('.donate-button');
+                const cancelButton = requestItem.querySelector('.cancel-button');
+                donateButton.style.display = 'none';
+                cancelButton.style.display = 'none';
+                requestItem.querySelector('.details').style.display = 'none';
+            }
+        }
+
+        document.getElementById('closeSuccess').addEventListener('click', function() {
+            const successAlert = document.getElementById('successAlert');
+            successAlert.style.display = 'none';
+        });
+    </script>
+</body>
+</html>

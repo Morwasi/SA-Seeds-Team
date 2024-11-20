@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmWatch - Request Help</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-green: #16a34a;
+            --dark-navy: #1f2937;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f9fafb;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation Bar Styles */
+        .navbar {
+            background-color: var(--primary-green);
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover {
+            color: #bbf7d0;
+        }
+
+        /* Responsive Navigation */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+                background: none;
+                border: none;
+                color: white;
+                font-size: 1.5rem;
+                cursor: pointer;
+                padding: 0.5rem;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: var(--primary-green);
+                flex-direction: column;
+                padding: 1rem;
+                gap: 1rem;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-container {
+                position: relative;
+            }
+
+            .nav-links a {
+                padding: 0.5rem 0;
+            }
+        }
+
+        /* Form Styles */
+        .form-container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: var(--dark-navy);
+        }
+
+        input[type="text"],
+        input[type="file"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        textarea {
+            resize: none;
+            height: 100px;
+        }
+
+        button {
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        /* Review Card Styles */
+        .review-card {
+            display: none; /* Hidden by default */
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f9fafb;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .review-item {
+            margin-bottom: 10px;
+        }
+
+        .review-item label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .review-item p {
+            margin: 0;
+        }
+
+        .review-buttons {
+            text-align: right;
+            margin-top: 20px;
+        }
+
+
+        /* Success Alert (Mostly unchanged) */
+        .success-alert {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            text-align: center;
+        }
+
+        .success-alert p {
+            margin-bottom: 10px;
+        }
+
+        .success-button {
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .success-button:hover {
+            background-color: #218838;
+        }
+
+        /* Ask for help button */
+        .ask-for-help-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary-green);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .ask-for-help-button:hover {
+            background-color: #10803a;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">🌾 FarmWatch</a>
+            <button class="menu-toggle" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="nav-links">
+                <a href="home.html">Home</a>
+                <a href="statistics.html">Statistics</a>
+                <a href="settings.html">Settings</a>
+                <a href="profile.html">Profile</a>
+                <a href="logout.html">Logout</a>
+                <a href="notifications.html">Notifications</a>
+                <a href="track.html">Track</a>
+                <a href="#"><i class="fas fa-comment-dots"></i> Chat</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="form-container">
+        <h2>Request Help</h2>
+        <form id="helpForm">
+            <select id="helpType">
+                <option value="">Select help type...</option>
+                <option value="funding">Funding</option>
+                <option value="equipment">Equipment</option>
+                <option value="donation">Donation</option>
+                <option value="other">Other</option>
+            </select>
+            <input type="text" id="name" placeholder="Enter your name">
+            <input type="text" id="surname" placeholder="Enter your surname">
+            <input type="text" id="location" placeholder="Enter your location">
+            <textarea id="additionalInfo" placeholder="Describe your situation"></textarea>
+            <input type="text" id="profilePicture" placeholder="Profile Picture URL (optional)">
+            <input type="text" id="farmPhoto1" placeholder="Farm Photo URL 1 (optional)">
+            <input type="text" id="farmPhoto2" placeholder="Farm Photo URL 2 (optional)">
+            <input type="text" id="farmPhoto3" placeholder="Farm Photo URL 3 (optional)">
+            <input type="text" id="farmPhoto4" placeholder="Farm Photo URL 4 (optional)">
+            <input type="text" id="farmPhoto5" placeholder="Farm Photo URL 5 (optional)">
+            <button type="button" id="previewRequest">Preview Request</button>
+        </form>
+    </div>
+
+    <div class="review-card" id="reviewCard">
+        <h3>Review Your Request</h3>
+        <div id="reviewDetails"></div>
+        <div class="review-buttons">
+            <button type="button" id="submitRequest">Submit</button>
+            <button type="button" id="cancelReview">Cancel</button>
+        </div>
+    </div>
+
+    <div class="success-alert" id="successAlert">
+        <p>Your help request has been successfully submitted!</p>
+        <button class="success-button" id="closeSuccess">Close</button>
+    </div>
+
+   
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const helpForm = document.getElementById('helpForm');
+            const previewButton = document.getElementById('previewRequest');
+            const reviewCard = document.getElementById('reviewCard');
+            const reviewDetails = document.getElementById('reviewDetails');
+            const submitButton = document.getElementById('submitRequest');
+            const cancelButton = document.getElementById('cancelReview');
+            const successAlert = document.getElementById('successAlert');
+            const closeSuccessButton = document.getElementById('closeSuccess');
+
+            previewButton.addEventListener('click', function(e) {
+                e.preventDefault(); // Prevent form submission
+
+                const formData = {
+                    helpType: document.getElementById('helpType').value,
+                    name: document.getElementById('name').value,
+                    surname: document.getElementById('surname').value,
+                    location: document.getElementById('location').value,
+                    additionalInfo: document.getElementById('additionalInfo').value,
+                    profilePicture: document.getElementById('profilePicture').value,
+                    farmPhotos: [
+                        document.getElementById('farmPhoto1').value,
+                        document.getElementById('farmPhoto2').value,
+                        document.getElementById('farmPhoto3').value,
+                        document.getElementById('farmPhoto4').value,
+                        document.getElementById('farmPhoto5').value
+                    ].filter(photo => photo !== '') // Filter out empty photo URLs
+                };
+
+                displayReview(formData);
+            });
+
+            submitButton.addEventListener('click', function() {
+                // Send the formData to your server or perform other actions
+                console.log("Submitting data:", formData); // Replace this with actual submission logic
+                successAlert.style.display = 'block';
+                reviewCard.style.display = 'none';
+            });
+
+            cancelButton.addEventListener('click', function() {
+                reviewCard.style.display = 'none';
+            });
+
+            closeSuccessButton.addEventListener('click', function() {
+                successAlert.style.display = 'none';
+            });
+
+            function displayReview(data) {
+                let reviewHTML = '';
+                for (const key in data) {
+                    if (data[key] !== "" || Array.isArray(data[key]) && data[key].length > 0) { // Only show non empty fields
+                        reviewHTML += `<div class="review-item">
+                                        <label>${key.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/_/g,' ').toUpperCase()}:</label>
+                                        <p>${Array.isArray(data[key]) ? data[key].join(', ') : data[key]}</p>
+                                    </div>`;
+                    }
+                }
+                reviewDetails.innerHTML = reviewHTML;
+                reviewCard.style.display = 'block';
+            }
+            let formData; // Declare formData here so it's available in both functions.
+        });
+
+        function help() {
+          window.location.href = "help.html";
+        }
+    </script>
+</body>
+</html>
