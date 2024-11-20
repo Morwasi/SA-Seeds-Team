@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kwa Mhlanga Weather Forecast</title>
+    <style>
+        :root {
+            --primary-green: #2ecc71;
+            --secondary-green: #27ae60;
+            --background-white: #f4f4f4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: var(--background-white);
+            color: #333;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            background-color: var(--primary-green);
+            padding: 15px;
+            color: white;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ecf0f1;
+        }
+
+        .weather-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .weather-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 200px;
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .weather-card:hover {
+            transform: scale(1.05);
+        }
+
+        .weather-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .location-info {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--secondary-green);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">Weather Forecast</div>
+        <div class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="statistics.html">Statistics</a>
+            <a href="settings.html">Settings</a>
+            <a href="profile.html">Profile</a>
+            <a href="notifications.html">Notifications</a>
+            <a href="track.html">Track</a>
+            <a href="liveChat.html">Chat</a>
+            <a href="logout.html">Logout</a>
+        </div>
+    </nav>
+
+    <div class="location-info">
+        <h1>Kwa Mhlanga</h1>
+        <p>Coordinates: -25.4872° S, 29.2952° E</p>
+    </div>
+
+    <div id="weather-forecast" class="weather-container"></div>
+
+    <script>
+        const weatherData = [
+            {
+                day: 'Monday',
+                icon: '☀️',
+                temperature: 28,
+                humidity: 45,
+                windSpeed: 12
+            },
+            {
+                day: 'Tuesday',
+                icon: '🌤️',
+                temperature: 26,
+                humidity: 50,
+                windSpeed: 10
+            },
+            {
+                day: 'Wednesday',
+                icon: '🌥️',
+                temperature: 25,
+                humidity: 55,
+                windSpeed: 8
+            },
+            {
+                day: 'Thursday',
+                icon: '⛅',
+                temperature: 27,
+                humidity: 48,
+                windSpeed: 11
+            },
+            {
+                day: 'Friday',
+                icon: '🌦️',
+                temperature: 24,
+                humidity: 60,
+                windSpeed: 15
+            },
+            {
+                day: 'Saturday',
+                icon: '🌧️',
+                temperature: 22,
+                humidity: 65,
+                windSpeed: 18
+            },
+            {
+                day: 'Sunday',
+                icon: '☁️',
+                temperature: 23,
+                humidity: 62,
+                windSpeed: 14
+            }
+        ];
+
+        function renderWeatherForecast() {
+            const forecastContainer = document.getElementById('weather-forecast');
+            
+            weatherData.forEach(day => {
+                const weatherCard = document.createElement('div');
+                weatherCard.classList.add('weather-card');
+                weatherCard.innerHTML = `
+                    <div class="weather-icon">${day.icon}</div>
+                    <h3>${day.day}</h3>
+                    <p>Temperature: ${day.temperature}°C</p>
+                    <p>Humidity: ${day.humidity}%</p>
+                    <p>Wind Speed: ${day.windSpeed} km/h</p>
+                `;
+                forecastContainer.appendChild(weatherCard);
+            });
+        }
+
+        // Initial render
+        renderWeatherForecast();
+    </script>
+</body>
+</html>

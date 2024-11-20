@@ -2,255 +2,219 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <title>FarmWatch - Chat</title>
+    <title>Farmers Community Chat</title>
     <style>
         :root {
-            --primary-green: #28a745;
-            --dark-navy: #1d2736;
-            --light-gray: #f8f9fa;
-            --chat-bg: #f1f1f1;
+            --primary-green: #2ecc71;
+            --secondary-green: #27ae60;
+            --background-white: #f4f4f4;
+            --chat-bubble-green: #d5f5e3;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: 'Arial', sans-serif;
         }
 
-        body, html {
-            height: 100%;
+        body {
+            background-color: var(--background-white);
             display: flex;
-            flex-direction: column;
+            height: 100vh;
         }
 
-        nav {
-            background-color: var(--primary-green);
-            padding: 1rem 2rem;
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            background-color: var(--primary-green);
+            padding: 15px;
             color: white;
-        }
-
-        .nav-brand {
-            font-size: 1.5rem;
-            font-weight: bold;
+            z-index: 100;
         }
 
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 15px;
         }
 
         .nav-links a {
             color: white;
             text-decoration: none;
-            padding: 0.5rem 1rem;
-            transition: background-color 0.3s;
-        }
-
-        .nav-links a:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
         }
 
         .chat-container {
-            flex: 1;
+            width: 100%;
+            max-width: 800px;
+            margin: 80px auto 20px;
             display: flex;
             flex-direction: column;
-            background-color: var(--chat-bg);
-            padding: 1rem;
+            height: calc(100vh - 200px);
             overflow-y: auto;
-            display: none; /* Initially hidden until loading completes */
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
         .message {
             max-width: 70%;
-            margin: 0.5rem;
-            padding: 1rem;
-            border-radius: 8px;
+            margin: 10px 0;
+            padding: 10px 15px;
+            border-radius: 15px;
+            clear: both;
+            position: relative;
         }
 
-        .message.user {
+        .message.sent {
+            background-color: var(--chat-bubble-green);
             align-self: flex-end;
-            background-color: var(--primary-green);
-            color: white;
+            float: right;
         }
 
-        .message.other {
+        .message.received {
+            background-color: #e8f4f8;
             align-self: flex-start;
-            background-color: var(--light-gray);
-            color: var(--dark-navy);
+            float: left;
         }
 
-        .message-input {
+        .message-time {
+            font-size: 0.7em;
+            color: #888;
+            position: absolute;
+            bottom: -15px;
+            right: 0;
+        }
+
+        .chat-input {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
             display: flex;
-            padding: 1rem;
+            padding: 15px;
             background-color: white;
-            border-top: 1px solid #ddd;
-            display: none; /* Initially hidden until loading completes */
+            box-shadow: 0 -4px 6px rgba(0,0,0,0.1);
         }
 
-        .message-input input {
-            flex: 1;
-            padding: 0.5rem;
+        .chat-input input {
+            flex-grow: 1;
+            padding: 10px;
             border: 1px solid #ddd;
-            border-radius: 4px;
-            margin-right: 0.5rem;
+            border-radius: 20px;
+            margin-right: 10px;
         }
 
-        .message-input button {
+        .chat-input button {
             background-color: var(--primary-green);
             color: white;
             border: none;
-            padding: 0.6rem 1rem;
-            border-radius: 4px;
+            padding: 10px 20px;
+            border-radius: 20px;
             cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .message-input button:hover {
-            background-color: #218838;
-        }
-
-        /* Loading overlay styles */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.8);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .spinner {
-            border: 8px solid var(--light-gray);
-            border-top: 8px solid var(--primary-green);
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .loading-message {
-            margin-top: 15px;
-            font-size: 1.2rem;
-            color: var(--dark-navy);
         }
     </style>
 </head>
 <body>
-    <nav>
-        <a href="Home.html">Home</a>
-        
-         <a href="statistics.html">Statistics</a>
-            <a href="settings.html">Settings</a>
-            <a href="profile.html">Profile</a>
-            <a href="logout.html">Logout</a>
-            <a href="notifications.html">Notifications</a>
-            <a href="track.html">Track</a>
+    <nav class="navbar">
+        <div>Farmers Community Chat</div>
+        <div class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="statistics.html">Statistics</a>
+                <a href="settings.html">Settings</a>
+                <a href="profile.html">Profile</a>
+                <a href="notifications.html">Notifications</a>
+                <a href="track.html">Track</a>
+                <a href="logout.html">Logout</a>
         </div>
     </nav>
-    
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="spinner"></div>
-        <div class="loading-message">You are about to join the general real-time live server...</div>
-    </div>
-    
-    <div class="chat-container" id="chatContainer">
-        <!-- Mocked data for chat -->
-        <div class="message user">Hi, how is the weather affecting your crops?</div>
-        <div class="message other">Hey! The rain has been beneficial so far, but I am worried it might flood.</div>
-        <div class="message user">Hopefully, it won't. Keep me updated!</div>
-    </div>
 
-    <div class="message-input" id="messageInputSection">
-        <input type="text" id="messageInput" placeholder="Type a message...">
-        <button id="sendMessageButton">Send</button>
+    <div id="chat-container" class="chat-container"></div>
+
+    <div class="chat-input">
+        <input type="text" id="message-input" placeholder="Type your message...">
+        <button onclick="sendMessage()">Send</button>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const loadingOverlay = document.getElementById('loadingOverlay');
+        const predefinedUsers = [
+            "Maria Themba", "John Kekana", "Sarah Naidoo", 
+            "Peter Maluleke", "Grace Molefe", "David Botha"
+        ];
 
-            // Simulate a loading delay to show the spinner
-            setTimeout(() => {
-                loadingOverlay.style.display = 'none';
-                document.getElementById('chatContainer').style.display = 'flex';
-                document.getElementById('messageInputSection').style.display = 'flex';
-            }, 2000); // 2 seconds delay to simulate server connection
+        const predefinedMessages = [
+            "How are water irrigation techniques working for others?",
+            "Does anyone have experience with organic farming?",
+            "Looking for advice on crop rotation",
+            "What's the best way to protect crops from pests?",
+            "Anyone know good sources of agricultural funding?",
+            "Sharing my experience with sustainable farming methods",
+            "Need help understanding new agricultural technologies",
+            "Discussing challenges of small-scale farming",
+            "Seeking advice on soil conservation",
+            "Sharing successful harvest strategies"
+        ];
 
-            document.getElementById('sendMessageButton').addEventListener('click', function() {
-                const messageInput = document.getElementById('messageInput');
-                const messageText = messageInput.value.trim();
+        function getRandomUser() {
+            return predefinedUsers[Math.floor(Math.random() * predefinedUsers.length)];
+        }
 
-                if (messageText !== "") {
-                    // Create a message element with the user's message
-                    const messageElement = document.createElement('div');
-                    messageElement.textContent = messageText;
-                    messageElement.classList.add('message', 'user');
-                    document.getElementById('chatContainer').appendChild(messageElement);
+        function getRandomMessage() {
+            return predefinedMessages[Math.floor(Math.random() * predefinedMessages.length)];
+        }
 
-                    // Scroll to the bottom of the chat
-                    const chatContainer = document.getElementById('chatContainer');
-                    chatContainer.scrollTop = chatContainer.scrollHeight;
+        function formatTime(date) {
+            return date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        }
 
-                    // Clear the input
-                    messageInput.value = '';
-                }
-            });
+        function addMessage(message, type = 'received') {
+            const chatContainer = document.getElementById('chat-container');
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', type);
+            
+            const randomUser = getRandomUser();
+            const currentTime = new Date();
+
+            messageElement.innerHTML = `
+                <strong>${randomUser}</strong>
+                <p>${message}</p>
+                <span class="message-time">${formatTime(currentTime)}</span>
+            `;
+            
+            chatContainer.appendChild(messageElement);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('message-input');
+            if (input.value.trim()) {
+                addMessage(input.value, 'sent');
+                input.value = '';
+            }
+        }
+
+        // Simulate random incoming messages
+        function simulateIncomingMessages() {
+            if (Math.random() < 0.7) {  // 70% chance of a message
+                addMessage(getRandomMessage());
+            }
+        }
+
+        // Initial messages
+        for (let i = 0; i < 10; i++) {
+            addMessage(getRandomMessage());
+        }
+
+        // Simulate incoming messages periodically
+        setInterval(simulateIncomingMessages, 5000);
+
+        // Send message on Enter key
+        document.getElementById('message-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
         });
     </script>
-<!-- Code injected by live-server -->
-<script>
-    // <![CDATA[  <-- For SVG support
-    if ('WebSocket' in window) {
-        (function () {
-            function refreshCSS() {
-                var sheets = [].slice.call(document.getElementsByTagName("link"));
-                var head = document.getElementsByTagName("head")[0];
-                for (var i = 0; i < sheets.length; ++i) {
-                    var elem = sheets[i];
-                    var parent = elem.parentElement || head;
-                    parent.removeChild(elem);
-                    var rel = elem.rel;
-                    if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-                        var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-                        elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-                    }
-                    parent.appendChild(elem);
-                }
-            }
-            var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-            var address = protocol + window.location.host + window.location.pathname + '/ws';
-            var socket = new WebSocket(address);
-            socket.onmessage = function (msg) {
-                if (msg.data == 'reload') window.location.reload();
-                else if (msg.data == 'refreshcss') refreshCSS();
-            };
-            if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-                console.log('Live reload enabled.');
-                sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-            }
-        })();
-    }
-    else {
-        console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-    }
-    // ]]>
-</script>
 </body>
 </html>

@@ -163,6 +163,28 @@
         background-color: #10803a; /* Darker green on hover */
         }
 
+
+        .ask-for-help {
+        position: fixed; /* Makes it stay in place */
+        bottom: 180px;   /* Distance from the bottom */
+        right: 20px;    /* Distance from the right */
+        background-color: #16a34a; /* Same green as your navbar */
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Add a subtle shadow */
+        transition: background-color 0.3s ease; /* Smooth color transition */
+        
+        }
+
+        .ask-for-help:hover {
+        background-color: #10803a; /* Darker green on hover */
+        }
+
+
         .search-button {
             background-color: #16a34a;
             color: white;
@@ -395,6 +417,19 @@
             justify-content: center;
             font-size: 24px;
         }
+        .forecast-link {
+    display: inline-block; /* Makes it a block-level element for padding */
+    padding: 0.5rem 1rem;
+    background-color: #4CAF50; /* Green */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s; /* Smooth transition on hover */
+}
+
+.forecast-link:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
         .weather-details {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -454,7 +489,7 @@
         <div class="search-bar">
             <input type="text" id="locationSearch" placeholder="Enter Location..." class="search-input">
             <button onclick="searchWeather()" class="search-button">Search</button>
-            <button class="stats-button" onclick="">📊 Statistics</button>
+            <button class="stats-button" onclick="stats()">📊 Statistics</button>
         </div>
 
         <div class="notifications">
@@ -466,6 +501,11 @@
             <div class="notification-item">Optimal harvest time for Sector A approaching</div>
         </div>
         <button class="ask-for-help-button" onclick="help()">Ask for Help</button>
+        <button class="ask-for-help" onclick="help2()">Help A Farmer</button>
+        
+        
+
+        
 
         <div class="dashboard-grid">
             <div class="dashboard-card">
@@ -550,8 +590,9 @@
                 <p>Harvesting details will be shown here...</p>
             </div>
             <div class="dashboard-card">
-                <h3>📈 Historical Weather Data</h3>
-                <p>Weather history and trends will appear here...</p>
+                <h3>Upcoming Weather Patterns</h3>
+                <p>Click the link to view your weekly forecast</p>
+                <a href="forecast.html" class="forecast-link">View Forecast &rarr;</a>
             </div>
         </div>
     </main>
@@ -616,6 +657,9 @@
     function getRandomNotification() {
         const index = Math.floor(Math.random() * notificationsArray.length);
         return notificationsArray[index];
+    }
+    function stats(){
+        window.location.href = "statistics.html";
     }
 
     function displayRandomNotification() {
@@ -711,6 +755,10 @@
         
         function help() {
             window.location.href = "donation.html";
+        }
+
+        function help2() {
+            window.location.href = "donars.html";
         }
 
         function displayWeather(weatherData) {

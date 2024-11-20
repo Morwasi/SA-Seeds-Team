@@ -2,34 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <title>FarmWatch - Notifications</title>
+    <title>Farmer Notifications Dashboard</title>
     <style>
+        :root {
+            --primary-green: #2ecc71;
+            --background-white: #f4f4f4;
+            --high-priority-red: #e74c3c;
+            --medium-priority-yellow: #f39c12;
+            --low-priority-green: #27ae60;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Arial', sans-serif;
         }
 
-        :root {
-            --primary-green: #28a745;
-            --dark-green: #218838;
-            --light-gray: #f8f9fa;
+        body {
+            background-color: var(--background-white);
+            display: flex;
+            flex-direction: column; /* Changed to column for vertical stacking */
+            min-height: 100vh;
         }
 
-        .navbar {
+        nav {
             background-color: var(--primary-green);
             padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             color: white;
-            position: relative;
+            /* Removed position: relative; */
         }
 
-        .logo {
+        .nav-brand {
             font-size: 1.5rem;
             font-weight: bold;
         }
@@ -42,12 +49,20 @@
 
         .nav-links {
             display: flex;
+            /* Removed unnecessary styles for responsiveness */
         }
 
         .nav-links a {
             color: white;
             text-decoration: none;
             margin-left: 1.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
         }
 
         @media (max-width: 768px) {
@@ -71,145 +86,166 @@
             }
         }
 
-        .container {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
-        .notification-card {
-            background: white;
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            border-left: 4px solid var(--primary-green);
-        }
-
-        .notification-header {
+        .notifications-container {
+            flex: 1; /* Added to allow notifications to take up remaining space */
+            width: 100%;
+            padding: 20px;
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
         }
 
-        .notification-title {
-            font-weight: bold;
-            color: #333;
+        .notification {
+            width: 300px;
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .notification-priority-high {
+            background-color: var(--high-priority-red);
+            color: white;
+        }
+
+        .notification-priority-medium {
+            background-color: var(--medium-priority-yellow);
+            color: white;
+        }
+
+        .notification-priority-low {
+            background-color: var(--low-priority-green);
+            color: white;
         }
 
         .notification-time {
-            color: #666;
-            font-size: 0.9rem;
+            position: absolute;
+            bottom: 5px;
+            right: 10px;
+            font-size: 0.7em;
+            opacity: 0.8;
         }
 
-        .notification-content {
-            color: #444;
-            line-height: 1.4;
+        .notification-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
         }
 
-        .priority-high {
-            border-left-color: #dc3545;
-        }
-
-        .priority-medium {
-            border-left-color: #ffc107;
-        }
-
-        h1 {
-            color: #333;
-            margin-bottom: 1.5rem;
-        }
-
-        .filter-bar {
-            background: var(--light-gray);
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-            display: flex;
-            gap: 1rem;
-        }
-
-        .filter-bar select {
-            padding: 0.5rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            outline: none;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="logo">🌾 FarmWatch</div>
+    <nav>
+        <div class="nav-brand">🌾 FarmWatch</div>
         <div class="menu-icon">☰</div>
         <div class="nav-links">
             <a href="home.html">Home</a>
-            <a href="profile.html">Profile</a>
             <a href="settings.html">Settings</a>
-            <a href="logout.html">Logout</a>
-            <a href="statistics.html">Statistics</a>
+            <a href="statistics.html">Statistics</a> <a href="profile.html">Profile</a>
+            <a href="liveChat.html"><i class="fas fa-comment-dots"></i> Chat</a>
             <a href="track.html">Track</a>
-            <a href="#"><i class="fas fa-comment-dots"></i> Chat</a>
+            <a href="logout.html">Logout</a>
         </div>
     </nav>
+    <div id="notifications-container" class="notifications-container"></div>
 
-    <div class="container">
-        <h1>Notifications</h1>
-
-        <div class="filter-bar">
-            <select>
-                <option>All Notifications</option>
-                <option>Weather Alerts</option>
-                <option>Crop Updates</option>
-                <option>System Alerts</option>
-            </select>
-            <select>
-                <option>All Priority</option>
-                <option>High Priority</option>
-                <option>Medium Priority</option>
-                <option>Low Priority</option>
-            </select>
-        </div>
-
-        <div class="notification-card priority-high">
-            <div class="notification-header">
-                <span class="notification-title">Severe Weather Alert</span>
-                <span class="notification-time">2 hours ago</span>
-            </div>
-            <div class="notification-content">
-                Heavy rainfall expected in your area tomorrow. Consider adjusting irrigation schedules.
-            </div>
-        </div>
-
-        <div class="notification-card priority-medium">
-            <div class="notification-header">
-                <span class="notification-title">Optimal Harvest Alert</span>
-                <span class="notification-time">5 hours ago</span>
-            </div>
-            <div class="notification-content">
-                Sector A crops have reached optimal maturity. Recommended harvest window: Next 48 hours.
-            </div>
-        </div>
-
-        <div class="notification-card">
-            <div class="notification-header">
-                <span class="notification-title">Soil Moisture Update</span>
-                <span class="notification-time">1 day ago</span>
-            </div>
-            <div class="notification-content">
-                Soil moisture levels in Sector B are within optimal range. No irrigation needed today.
-            </div>
-        </div>
-    </div>
-    
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuIcon = document.querySelector('.menu-icon');
-            const navLinks = document.querySelector('.nav-links');
+        const notificationTemplates = {
+            high: [
+                {
+                    icon: "🌊",
+                    title: "Severe Weather Alert",
+                    message: "Heavy rain predicted in your farm area. Secure livestock and equipment immediately!"
+                },
+                {
+                    icon: "🐄",
+                    title: "Livestock Movement Warning",
+                    message: "Your cows are moving outside usual farm parameters. Check perimeter fencing!"
+                },
+                {
+                    icon: "🌪️",
+                    title: "Extreme Weather Warning",
+                    message: "Potential storm approaching. Take immediate protective measures for crops!"
+                }
+            ],
+            medium: [
+                {
+                    icon: "🧪",
+                    title: "Pesticide Application Reminder",
+                    message: "Time to apply seasonal pesticides to protect your crops from potential infestations."
+                },
+                {
+                    icon: "💧",
+                    title: "Irrigation Schedule",
+                    message: "Check and adjust irrigation systems for upcoming dry spell."
+                },
+                {
+                    icon: "🌱",
+                    title: "Crop Health Check",
+                    message: "Recommended weekly inspection of crop health and soil conditions."
+                }
+            ],
+            low: [
+                {
+                    icon: "🌾",
+                    title: "Harvest Preparation",
+                    message: "Early preparation reminder for upcoming harvest season. Check equipment readiness."
+                },
+                {
+                    icon: "📅",
+                    title: "Seasonal Planning",
+                    message: "Review and update your seasonal farming calendar and crop rotation strategy."
+                },
+                {
+                    icon: "🌿",
+                    title: "Seed Inventory",
+                    message: "Time to review and restock your seed inventory for next planting season."
+                }
+            ]
+        };
 
-            menuIcon.addEventListener('click', function() {
-                navLinks.classList.toggle('show');
-            });
-        });
+        function createNotification(priority) {
+            const templates = notificationTemplates[priority];
+            const notification = templates[Math.floor(Math.random() * templates.length)];
+            
+            const notificationElement = document.createElement('div');
+            notificationElement.classList.add('notification', `notification-priority-${priority}`);
+            
+            const currentTime = new Date();
+            
+            notificationElement.innerHTML = `
+                <div class="notification-icon">${notification.icon}</div>
+                <h3>${notification.title}</h3>
+                <p>${notification.message}</p>
+                <span class="notification-time">${currentTime.toLocaleTimeString()}</span>
+            `;
+            
+            return notificationElement;
+        }
+
+        function generateNotifications() {
+            const container = document.getElementById('notifications-container');
+            
+            // Generate mix of priority notifications
+            const priorities = ['high', 'medium', 'low'];
+            const notificationCount = 9;
+            
+            for (let i = 0; i < notificationCount; i++) {
+                const priority = priorities[Math.floor(Math.random() * priorities.length)];
+                container.appendChild(createNotification(priority));
+            }
+        }
+
+        // Initial generation of notifications
+        generateNotifications();
     </script>
 </body>
 </html>
