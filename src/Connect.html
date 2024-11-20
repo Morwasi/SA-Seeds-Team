@@ -35,6 +35,21 @@
             z-index: 1000;
         }
 
+        .nav-links a {
+    display: inline-block; /* Make links block-level for easier styling */
+    padding: 0.8rem 1.2rem; /* Adjust padding as needed */
+    margin: 0 0.5rem; /* Add spacing between links */
+    background-color: #2ecc71; /* Green background */
+    color: white;          /* White text color */
+    text-decoration: none; /* Remove underlines */
+    border-radius: 50%;    /* Create circular shape */
+    transition: background-color 0.3s; /* Smooth transition effect */
+}
+
+.nav-links a:hover {
+    background-color: #28a745; /* Darker green on hover */
+}
+
         .logo {
             display: flex;
             align-items: center;
@@ -43,6 +58,7 @@
             color: var(--primary-color);
             font-weight: bold;
         }
+        
 
         .stats-bar {
             background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
@@ -326,11 +342,17 @@
     <nav class="navbar">
         <div class="logo">
             <i class="fas fa-leaf"></i>
-            AgriConnect Pro
+            FarmWatch Pro Cooncet
         </div>
-        <div style="display: flex; gap: 1rem; align-items: center;">
-            <i class="fas fa-bell" style="font-size: 1.2rem; color: #666;"></i>
-            <i class="fas fa-user-circle" style="font-size: 1.2rem; color: #666;"></i>
+        <div class="nav-links">  <!-- Added a container for easier styling -->
+            <a href="home.html">Home</a>
+            <a href="settings.html">Settings</a>
+            <a href="statistics.html">Profile</a>
+            <a href="notifications.html">Notifications</a>
+            <a href="track.html">Track</a>
+            <a href="Connect.html">Connect</a>
+            <a href="liveChat.html"><i class="fas fa-comment-dots"></i> Chat</a>
+            <a href="logout.html">Logout</a>
         </div>
     </nav>
 
